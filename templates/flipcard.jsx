@@ -6,27 +6,31 @@ export default function flipcard(props) {
   const ariaLabels = Adapt.course.get('_globals')._accessibility._ariaLabels;
 
   const {
-    _flipDirection
+    _flipType,
+    _flipTime,
+    displayTitle,
+    body,
+    instruction
   } = props;
 
   return (
-    <div 
+    <div
       className='flipcard__inner component__inner' 
       role='region'
-      aria-label='{{_globals._components._flipcard.ariaRegion}}'
+      aria-label='_globals._components._flipcard.ariaRegion'
     >
 
       <templates.header {...props} />
 
       <div className='flipcard__widget component__widget clearfix'>
 
-        {props._items.map(({ _index, backBody, backTitle, frontImage }, index) =>
+        {props._items.map(({ _index, backBody, backTitle, frontImage, _flipDirection }, index) =>
           
           <div 
             className={classes([
-              `flipcard__item component__item item-${index}`,
-              {_flipDirection}
+              `flipcard__item component__item item-${index} ${_flipDirection}`,
             ])}
+            aria-labelledby={(displayTitle || body || instruction)}
             key={_index}
           >
             <div className='flipcard__item-face flipcard__item-front'>
@@ -39,7 +43,7 @@ export default function flipcard(props) {
 
           <div className='flipcard__item-face flipcard__item-back'>
 
-            {backTitle && 
+            {backTitle &&
               <div 
                 className='flipcard__item-back-title'
                 aria-live='polite'
@@ -48,7 +52,7 @@ export default function flipcard(props) {
               </div>
             }
 
-            {backBody && 
+            {backBody &&
               <div 
                 className='flipcard__item-back-body'
                 aria-live='polite'

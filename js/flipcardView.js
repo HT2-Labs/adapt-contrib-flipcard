@@ -22,7 +22,7 @@ class Flipcard extends ComponentView {
     const className = (items.length > 1) ? 'flipcard__multiple' : 'flipcard__single';
     $items.addClass(className);
 
-    this.$('.flipcard__widget').imageready(_.bind(function() {
+    this.$('.flipcard__widget').imageready(_.bind(() => {
       this.reRender();
       this.setReadyStatus();
     }, this));
@@ -37,7 +37,7 @@ class Flipcard extends ComponentView {
       this.model.reset(isResetOnRevisit);
     }
 
-    _.each(this.model.get('_items'), function(item) {
+    _.each(this.model.get('_items'), (item) => {
       item._isVisited = false;
     });
   }
@@ -122,17 +122,17 @@ class Flipcard extends ComponentView {
       const flipTime = this.model.get('_flipTime') || 'fast';
 
       if (backflipcard.is(':visible')) {
-        backflipcard.fadeOut(flipTime, function() {
+        backflipcard.fadeOut(flipTime, () => {
           frontflipcard.fadeIn(flipTime);
         });
       } else {
         const visibleflipcardBack = flipcardContainer.find('.flipcard__item-back:visible');
         if (visibleflipcardBack.length > 0) {
-          visibleflipcardBack.fadeOut(flipTime, function() {
+          visibleflipcardBack.fadeOut(flipTime, () => {
             flipcardContainer.find('.flipcard__item-front:hidden').fadeIn(flipTime);
           });
         }
-        frontflipcard.fadeOut(flipTime, function() {
+        frontflipcard.fadeOut(flipTime, () => {
           backflipcard.fadeIn(flipTime);
         });
       }
@@ -158,7 +158,7 @@ class Flipcard extends ComponentView {
 
   // This function will be used to get visited states of all flipcard items.
   getVisitedItems() {
-    return _.filter(this.model.get('_items'), function(item) {
+    return _.filter(this.model.get('_items'), (item) => {
       return item._isVisited;
     });
   }
