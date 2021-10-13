@@ -1,4 +1,3 @@
-import Adapt from 'core/js/adapt';
 import React from 'react';
 import { templates, classes, html, compile } from 'core/js/reactHelpers';
 
@@ -19,17 +18,17 @@ export default function flipcard(props) {
 
       <div className='component__widget flipcard__widget clearfix'>
 
-        {props._items.map(({ _index, backBody, backTitle, frontImage, _flipDirection }, index) =>
+        {props._items.map(({ backBody, backTitle, frontImage, _flipDirection }, index) =>
           
           <div 
             className={classes([
               `component__item flipcard__item item-${index} ${_flipDirection}`,
             ])}
-            aria-labelledby={(displayTitle || body || instruction)}
-            key={_index}
+            aria-labelledby={(displayTitle, body, instruction)}
+            key={index}
+            tabIndex='0'
           >
             <div
-              id={_index}
               className='flipcard__item-face flipcard__item-front'>
               <img
                 className='flipcard__item-frontImage'
@@ -38,10 +37,15 @@ export default function flipcard(props) {
               </img>
             </div>
 
-            <div className='flipcard__item-face flipcard__item-back'>
+            <div
+              className='flipcard__item-face flipcard__item-back'
+              aria-labelledby={(backTitle, backBody)}
+              role='button'
+            >
               {backTitle &&
-                <div 
+                <div
                   className='flipcard__item-back-title'
+                  aria-hidden='true'
                   aria-live='polite'
                 >
                 {html(compile(backTitle))}
@@ -49,8 +53,9 @@ export default function flipcard(props) {
               }
 
               {backBody &&
-                <div 
+                <div
                   className='flipcard__item-back-body'
+                  aria-hidden='true'
                   aria-live='polite'
                 >
                 {html(compile(backBody))}
