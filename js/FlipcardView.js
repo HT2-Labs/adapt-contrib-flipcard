@@ -6,7 +6,7 @@ class FlipcardView extends ComponentView {
   events() {
     return {
       'click .flipcard__item': 'onClickFlipItem',
-      'keypress .flipcard__item': 'onClickFlipItem'
+      'keypress .flipcard__item-face': 'onClickFlipItem'
     };
   }
 
@@ -65,13 +65,10 @@ class FlipcardView extends ComponentView {
     event && event.stopImmediatePropagation();
 
     const $selectedElement = $(event.currentTarget);
-    let isFlipcardFocused = false;
 
     this.$('.flipcard__item').on('transitionend', () => {
-      if (isFlipcardFocused) return;
-
       this.focusOnFlipcard($selectedElement);
-      isFlipcardFocused = true;
+      this.$('.flipcard__item').off('transitionend');
     });
 
 
@@ -80,10 +77,27 @@ class FlipcardView extends ComponentView {
   }
 
   performFlip() {
-    if (Modernizr.testProp('transformStyle', 'preserve-3d')) {
+    if (!Modernizr.testProp('transformStyle', 'preserve-3d')) {
       return this.performLegacyFlip();
     }
 
+    if (this.model.get('_flipType') === 'singleFlip' && !this.$selectedElement.hasClass('flipcard__flip')) {
+      const $items = $('.flipcard__item');
+      flipcardContainer.find($items).removeClass('flipcard__flip');
+
+      const itemToFlip = $items.parent().find('.flipcard__flip');
+      if (!itemToFlip.length) return;
+
+      this.focusOnFlipcard(itemToFlip, true);
+    }
+
+    this.$selectedElement.toggleClass('flipcard__flip');
+
+    const flipcardElementIndex = this.$selectedElement.data('index');
+    this.setVisited(flipcardElementIndex);
+  }
+
+  performLegacyFlip() {
     const $frontflipcard = this.$selectedElement.find('.flipcard__item-front');
     const $backflipcard = this.$selectedElement.find('.flipcard__item-back');
     const flipTime = this.model.get('_flipTime') || 'fast';
@@ -118,23 +132,6 @@ class FlipcardView extends ComponentView {
 
       this.focusOnFlipcard(visibleFlipcardBack.parents('.flipcard__item'), true);
     }
-  }
-
-  performLegacyFlip() {
-    if (this.model.get('_flipType') === 'singleFlip' && !this.$selectedElement.hasClass('flipcard__flip')) {
-      const $items = $('.flipcard__item');
-      flipcardContainer.find($items).removeClass('flipcard__flip');
-
-      const itemToFlip = $items.parent().find('.flipcard__flip');
-      if (!itemToFlip.length) return;
-
-      this.focusOnFlipcard(itemToFlip, true);
-    }
-
-    this.$selectedElement.toggleClass('flipcard__flip');
-
-    const flipcardElementIndex = this.$selectedElement.data('index');
-    this.setVisited(flipcardElementIndex);
   }
 
   focusOnFlipcard($selectedElement, isSingleFlip = false) {
