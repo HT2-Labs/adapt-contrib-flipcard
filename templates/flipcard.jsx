@@ -4,8 +4,7 @@ import { templates, classes, compile } from 'core/js/reactHelpers';
 export default function flipcard(props) {
   return (
     <div
-      className='component__inner flipcard__inner' 
-      role='region'
+      className='component__inner flipcard__inner'
     >
 
       <templates.header {...props} />
@@ -19,10 +18,10 @@ export default function flipcard(props) {
               `component__item flipcard__item item-${index} ${_flipDirection}`,
             ])}
             key={index}
+            role='button'
           >
             <div
               className='flipcard__item-face flipcard__item-front'
-              role='button'
             >
               <img
                 className='flipcard__item-frontImage'
@@ -33,12 +32,12 @@ export default function flipcard(props) {
 
             <div
               className='flipcard__item-face flipcard__item-back' 
-              role='button'
             >
               { backTitle &&
                 <div
                   className='flipcard__item-back-title'
                   dangerouslySetInnerHTML={{ __html: compile(backTitle)}}
+                  role='heading'
                 >
                 </div>
               }
