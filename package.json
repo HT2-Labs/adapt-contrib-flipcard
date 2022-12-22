@@ -49,6 +49,7 @@
     ]
   },
   "scripts": {
-    "postversion": "cp package.json bower.json"
+    "postversion": "cp package.json bower.json",
+    "test": "jest"
   }
 }
